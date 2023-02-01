@@ -10,18 +10,17 @@ const registerUser = async (req, res) => {
             if (password == confirmPassword) {
                 let newUser = new Student(req.body);
                 let token = await newUser.genrateToken();
-                console.log(token, 'is')
                 await newUser.save();
+                res.cookies(token).status(201).json({ success: true, message: 'User created successfully.' })
             } else {
                 res.status(400).json({ success: false, message: "Password and confirm password are not matched!" })
             }
         } else {
             res.status(401).json({ success: false, message: "User with this email already exist." })
         }
-        res.status(201).json({ success: true, message: 'User created successfully.' })
     } catch (e) {
         console.log(e)
-        res.status(500).json({ success: false, message: e })
+       res.status(500).send({ success: false, message: e })
     }
 }
 
@@ -37,12 +36,13 @@ const login = async (req, res) => {
         let isPasswordMatched = await bcrypt.compare(password, user.password)
         if (isPasswordMatched) {
             let token= await user.genrateToken();
-            res.cookies(token).status(200).json({ success: true, message: 'Login sucessfully.' })
+            res.cookie('loginToken',token).status(200).json({ success: true, message: 'Login sucessfully.' })
         } else {
             res.status(401).json({ sucess: false, message: 'Invalid login detail.' })
         }
     } catch (e) {
-      res.status(501).json({ sucess: false, message: e })
+        console.log(e)
+      res.status(500).json({ sucess: false, message: e })
     }
 }
 
