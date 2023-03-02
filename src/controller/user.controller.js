@@ -1,5 +1,6 @@
 const Student = require('../models/students');
 const bcrypt = require('bcrypt');
+
 // ===================== user controller ==============================//
 const registerUser = async (req, res) => {
     let password = req.body.password;
@@ -56,4 +57,15 @@ const getUsers = async (req, res) => {
     }
 }
 
-module.exports = { registerUser, getUsers, login }
+// ================== get Current User ==================//
+const getCurrentUser = async (req, res) => {
+    try {
+        let user = req.user;
+        console.log(user);
+        res.json(user)
+    } catch (e) {
+        res.status(500).json({ success: false, message: e })
+    }
+}
+
+module.exports = { registerUser, getUsers, login,getCurrentUser }
