@@ -11,7 +11,7 @@ const registerUser = async (req, res) => {
                 let newUser = new Student(req.body);
                 let token = await newUser.genrateToken();
                 await newUser.save();
-                res.cookies(token).status(201).json({ success: true, message: 'User created successfully.' })
+                res.cookies(token).status(201).json({ success: true, message: 'User created successfully.',token:token })
             } else {
                 res.status(400).json({ success: false, message: "Password and confirm password are not matched!" })
             }
@@ -36,7 +36,7 @@ const login = async (req, res) => {
         let isPasswordMatched = await bcrypt.compare(password, user.password)
         if (isPasswordMatched) {
             let token= await user.genrateToken();
-            res.cookie('loginToken',token).status(200).json({ success: true, message: 'Login sucessfully.' })
+            res.cookie('loginToken',token).status(200).json({ success: true, message: 'Login sucessfully.',token:token })
         } else {
             res.status(401).json({ sucess: false, message: 'Invalid login detail.' })
         }
