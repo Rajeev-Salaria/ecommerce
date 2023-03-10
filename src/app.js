@@ -12,7 +12,7 @@ app.use(express.urlencoded({extended:true}));
 
 const corsOptions = {
   origin: true,
-  methods: ["POST","GET"],
+  methods: ["POST","GET","PATCH","DELETE"],
   credentials: true,
   maxAge: 3600
 };
